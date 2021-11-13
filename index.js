@@ -20,39 +20,39 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('smart-zone');
-        const servicesCollection = database.collection('products');
+        const productsCollection = database.collection('products');
 
         // GET API
         app.get('/products', async (req, res) => {
-            const cursor = servicesCollection.find({});
-            const services = await cursor.toArray();
-            res.send(services);
+            const cursor = productsCollection.find({});
+            const products = await cursor.toArray();
+            res.send(products);
         });
 
         // GET Single Service
         app.get('/products/:id', async (req, res) => {
-            const id = req.params.id;
-            console.log('getting specific service', id);
-            const query = { id: ObjectId(id) };
-            const service = await servicesCollection.findOne(query);
-            res.json(service);
+            const id = req.params._id;
+            console.log('getting specific service', _id);
+            const query = { _id: ObjectId(_id) };
+            const product = await productsCollection.findOne(query);
+            res.json(product);
         })
 
         // POST API
         app.post('/products', async (req, res) => {
-            const service = req.body;
-            console.log('hit the post api', service);
+            const product = req.body;
+            console.log('hit the post api', product);
 
-            const result = await servicesCollection.insertOne(service);
+            const result = await productsCollection.insertOne(product);
             console.log(result);
             res.json(result)
         });
 
         // DELETE API
         app.delete('/products/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { id: ObjectId(id) };
-            const result = await servicesCollection.deleteOne(query);
+            const id = req.params._id;
+            const query = { _id: ObjectId(_id) };
+            const result = await productsCollection.deleteOne(query);
             res.json(result);
         })
 
