@@ -29,15 +29,6 @@ async function run() {
             res.send(products);
         });
 
-        // GET Single Service
-        app.get('/products/:id', async (req, res) => {
-            const id = req.params._id;
-            console.log('getting specific service', _id);
-            const query = { _id: ObjectId(_id) };
-            const product = await productsCollection.findOne(query);
-            res.json(product);
-        })
-
         // POST API
         app.post('/products', async (req, res) => {
             const product = req.body;
@@ -48,14 +39,13 @@ async function run() {
             res.json(result)
         });
 
-        // DELETE API
-        app.delete('/products/:id', async (req, res) => {
-            const id = req.params._id;
-            const query = { _id: ObjectId(_id) };
-            const result = await productsCollection.deleteOne(query);
-            res.json(result);
-        })
-
+        // Use POST to get data by keys
+        app.post('/products/byKeys', async (req, res) => {
+            const keys = req.body;
+            const query = { key: { $in: keys } }
+            const products = await productCollection.find(query).toArray();
+            res.send(products);
+        });
     }
     finally {
         // await client.close();
